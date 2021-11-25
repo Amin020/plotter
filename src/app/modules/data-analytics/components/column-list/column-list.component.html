@@ -1,0 +1,10 @@
+<div class="columns-list-container" cdkDrag>
+    <header>
+        Columns
+    </header>
+    <main>
+        <div class="column-item" *ngFor="let column of columns" cdkDrag>
+            {{ column }}
+        </div>
+    </main>
+</div>
