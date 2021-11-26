@@ -1,44 +1,52 @@
 <div class="data-analytics-container flex-row" cdkDropListGroup>
-    <!-- <app-column-list></app-column-list> -->
-    <div class="columns-list-container">
-        <header>
-            Columns
-        </header>
-        <main cdkDropList [cdkDropListData]="columns" [cdkDropListConnectedTo]="[dimenElement, measElement]">
-            <div class="column-item" *ngFor="let column of columns" cdkDrag>
-                {{ column }}
-            </div>
-        </main>
-    </div>
+    <ng-container *ngIf="!isLoading && !error; else loadingErrorTemp">
+        <div class="columns-list-container">
+            <header>
+                Columns
+            </header>
+            <main cdkDropList [cdkDropListData]="columns" [cdkDropListConnectedTo]="[dimenElement, measElement]">
+                <div class="column-item" *ngFor="let column of columns" cdkDrag>
+                    {{ column.name }}
+                </div>
+            </main>
+        </div>
 
-    <div class="right-section flex-column">
-        <section class="droppable-section-container flex-row">
-            <span class="title">
-                Dimension
-            </span>
-            <div class="droppable-area" #dimenElement="cdkDropList" cdkDropList [cdkDropListData]="droppedDimensions"
-                (cdkDropListDropped)="drop($event)">
-                <span class="dropped-item" *ngFor="let droppedDimension of droppedDimensions">
-                    {{ droppedDimension }}
+        <div class="right-section flex-column">
+            <section class="droppable-section-container flex-row">
+                <span class="title">
+                    Dimension
                 </span>
-            </div>
-            <button class="clear-btn" (click)="clearData('dimension')">
-                Clear
-            </button>
-        </section>
-        <section class="droppable-section-container flex-row">
-            <span class="title">
-                Measures
-            </span>
-            <div class="droppable-area" #measElement="cdkDropList" cdkDropList [cdkDropListData]="droppedMeasures"
-                (cdkDropListDropped)="drop($event)">
-                <span class="dropped-item" *ngFor="let droppedMeasure of droppedMeasures">
-                    {{ droppedMeasure }}
+                <div class="droppable-area" #dimenElement="cdkDropList" cdkDropList
+                    [cdkDropListData]="droppedDimensions" (cdkDropListDropped)="drop($event)">
+                    <span class="dropped-item" *ngFor="let droppedDimension of droppedDimensions">
+                        {{ droppedDimension.name }}
+                    </span>
+                </div>
+                <button class="clear-btn" (click)="clearData('dimension')">
+                    Clear
+                </button>
+            </section>
+            <section class="droppable-section-container flex-row">
+                <span class="title">
+                    Measures
                 </span>
-            </div>
-            <button class="clear-btn" (click)="clearData('measure')">
-                Clear
-            </button>
-        </section>
-    </div>
+                <div class="droppable-area" #measElement="cdkDropList" cdkDropList [cdkDropListData]="droppedMeasures"
+                    (cdkDropListDropped)="drop($event)">
+                    <span class="dropped-item" *ngFor="let droppedMeasure of droppedMeasures">
+                        {{ droppedMeasure.name }}
+                    </span>
+                </div>
+                <button class="clear-btn" (click)="clearData('measure')">
+                    Clear
+                </button>
+            </section>
+        </div>
+    </ng-container>
+    <ng-template #loadingErrorTemp>
+        <ngx-spinner *ngIf="isLoading" bdColor="rgba(0, 0, 0, 0.5)" size="medium" color="#fff" type="ball-beat"
+            [fullScreen]="true">
+            <p style="color: #ffffff"> Loading... </p>
+        </ngx-spinner>
+        <app-error *ngIf="error"></app-error>
+    </ng-template>
 </div>

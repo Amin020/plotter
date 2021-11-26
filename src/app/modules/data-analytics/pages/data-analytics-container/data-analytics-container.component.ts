@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
+import { ColumnsController } from 'src/app/core/controllers/columns.controller';
+import { ColumnModel } from 'src/app/core/models/column-model';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 @Component({
@@ -9,13 +12,34 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 })
 export class DataAnalyticsContainerComponent implements OnInit {
 
-  droppedDimensions: any = [];
-  droppedMeasures: any = [];
-  columns = ['Product', 'Revenue', 'Year'];
+  isLoading: boolean;
+  error: boolean;
+  droppedDimensions: Array<ColumnModel> = new Array<ColumnModel>();
+  droppedMeasures: Array<ColumnModel> = new Array<ColumnModel>();
+  columns: Array<ColumnModel> = new Array<ColumnModel>();
 
-  constructor() { }
+  constructor(
+    private spinner: NgxSpinnerService,
+    private columnsController: ColumnsController
+  ) { }
 
   ngOnInit(): void {
+    this.getAllColumns();
+  }
+
+  private getAllColumns(): void {
+    this.isLoading = true;
+    this.error = false;
+    this.spinner.show();
+    this.columnsController.getAllColumns(columns => {
+      this.isLoading = false;
+      this.spinner.hide();
+      this.columns = columns;
+    }, error => {
+      this.error = true;
+      this.isLoading = false;
+      this.spinner.hide();
+    });
   }
 
   drop($ev: CdkDragDrop<string[]>): void {

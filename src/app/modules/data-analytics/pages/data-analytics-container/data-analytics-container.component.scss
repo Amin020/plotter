@@ -28,6 +28,9 @@ header {
 }
 
 main {
+  height: calc(100% - 70px);
+  overflow: auto;
+
   .column-item {
     padding: 15px 20px;
     font-weight: bold;
@@ -82,4 +85,9 @@ main {
       padding: 0 10px;
     }
   }
+}
+
+ngx-spinner,
+app-error {
+  width: 100%;
 }

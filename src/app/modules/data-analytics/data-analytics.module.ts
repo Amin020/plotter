@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { DataAnalyticsRoutingModule } from './data-analytics-routing.module';
 import { DataAnalyticsContainerComponent } from './pages/data-analytics-container/data-analytics-container.component';
-import { DragDropModule } from '@angular/cdk/drag-drop';
+import { SharedModule } from '../shared/shared.module';
 
 
 @NgModule({
@@ -12,11 +12,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
   ],
   imports: [
     CommonModule,
-    DragDropModule,
+    SharedModule,
     DataAnalyticsRoutingModule
-  ],
-  exports: [
-    DragDropModule
   ]
 })
 export class DataAnalyticsModule { }

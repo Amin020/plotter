@@ -1,0 +1,22 @@
+.error-container {
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon {
+  background-color: red;
+  margin-bottom: 10px;
+}
+
+.error-title {
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  color: red;
+  margin-bottom: 8px;
+
+  p {
+    margin-bottom: 0;
+  }
+}
