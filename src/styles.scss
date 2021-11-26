@@ -40,3 +40,22 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #5d6c85;
 }
+
+.material {
+  @import "~ng-snotify/styles/material";
+}
+
+.simple {
+  @import "~ng-snotify/styles/simple";
+}
+
+.dark {
+  @import "~ng-snotify/styles/dark";
+}
+
+.snotify-icon {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  object-position: center;
+}

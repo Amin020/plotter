@@ -9,6 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DataService } from './core/services/data-service';
 import { ChartController } from './core/controllers/chart.controller';
+import { SnotifyService, ToastDefaults, SnotifyModule } from 'ng-snotify';
 
 
 @NgModule({
@@ -20,12 +21,15 @@ import { ChartController } from './core/controllers/chart.controller';
     BrowserAnimationsModule,
     FormsModule,
     RoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    SnotifyModule
   ],
   providers: [
+    { provide: 'SnotifyToastConfig', useValue: ToastDefaults },
     DataService,
     ColumnsController,
-    ChartController
+    ChartController,
+    SnotifyService
   ],
   bootstrap: [AppComponent]
 })

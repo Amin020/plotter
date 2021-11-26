@@ -5,6 +5,7 @@ import { ColumnModel } from 'src/app/core/models/column-model';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Chart } from 'chart.js';
 import { ChartController } from 'src/app/core/controllers/chart.controller';
+import { SnotifyService, SnotifyPosition } from 'ng-snotify';
 
 
 @Component({
@@ -19,19 +20,21 @@ export class DataAnalyticsContainerComponent implements OnInit, AfterViewInit {
   droppedDimensions: Array<ColumnModel> = new Array<ColumnModel>();
   droppedMeasures: Array<ColumnModel> = new Array<ColumnModel>();
   columns: Array<ColumnModel> = new Array<ColumnModel>();
-  canvas: any;
-  ctx: any;
-  config: any;
-  data = {
+  private canvas: any;
+  private ctx: any;
+  private data = {
     labels: [],
     datasets: [],
   };
-  @ViewChild('mychart') mychart: ElementRef;
+  private yAxesMeasureLabel = '';
+  private xAxesDimensionLabel = '';
+  @ViewChild('mychart') private mychart: ElementRef;
 
   constructor(
     private spinner: NgxSpinnerService,
     private columnsController: ColumnsController,
-    private chartController: ChartController
+    private chartController: ChartController,
+    private snotifyService: SnotifyService
   ) { }
 
   ngOnInit(): void {
@@ -39,9 +42,7 @@ export class DataAnalyticsContainerComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.renderChart();
-    }, 500);
+    this.renderChart();
   }
 
   private getAllColumns(): void {
@@ -59,7 +60,7 @@ export class DataAnalyticsContainerComponent implements OnInit, AfterViewInit {
     });
   }
 
-  private renderChart(): void {
+  renderChart(): void {
     this.canvas = this.mychart.nativeElement;
     this.ctx = this.canvas.getContext('2d');
 
@@ -73,33 +74,85 @@ export class DataAnalyticsContainerComponent implements OnInit, AfterViewInit {
           yAxes: [{
             ticks: {
               beginAtZero: true
-            }
+            },
+            scaleLabel: {
+              labelString: this.yAxesMeasureLabel,
+              display: true,
+            },
           }],
           xAxes: [{
             ticks: {
               autoSkip: false
-            }
+            },
+            scaleLabel: {
+              labelString: this.xAxesDimensionLabel,
+              display: true,
+            },
           }]
         }
       }
     });
   }
 
-  drop($ev: CdkDragDrop<string[]>): void {
+  drop($ev: CdkDragDrop<string[]>, type: string): void {
+    if (!this.isDroppingValid(type, $ev.previousContainer.data[$ev.previousIndex])) {
+      return;
+    }
     transferArrayItem($ev.previousContainer.data, $ev.container.data, $ev.previousIndex, $ev.currentIndex);
     if (this.droppedMeasures.length && this.droppedDimensions.length) {
       this.drawLineChart();
     }
   }
 
+  private isDroppingValid(type: string, draggedItem: any): boolean {
+    let isValid = true;
+    if (type === 'dimension') {
+      if (this.droppedDimensions.length > 0) {
+        this.snotifyService.error('Should only contains one dimension!', 'Oops', {
+          showProgressBar: true,
+          position: SnotifyPosition.leftBottom
+        });
+        isValid = false;
+      } else if (draggedItem.function === 'measure') {
+        this.snotifyService.error('Dragged column represents Measure!', 'Oops', {
+          showProgressBar: true,
+          position: SnotifyPosition.leftBottom
+        });
+        isValid = false;
+      }
+    }
+    if (type === 'measure') {
+      if (this.droppedMeasures.length > 0) {
+        this.snotifyService.error('Should only contains one measure!', 'Oops', {
+          showProgressBar: true,
+          position: SnotifyPosition.leftBottom
+        });
+        isValid = false;
+      } else if (draggedItem.function === 'dimension') {
+        this.snotifyService.error('Dragged column represents Dimension!', 'Oops', {
+          showProgressBar: true,
+          position: SnotifyPosition.leftBottom
+        });
+        isValid = false;
+      }
+    }
+    return isValid;
+  }
+
   private drawLineChart(): void {
     this.spinner.show();
     this.chartController.getChartData(this.droppedMeasures, this.droppedDimensions, (chartDatasets, chartLabels) => {
       this.data = { datasets: chartDatasets, labels: chartLabels };
+      this.yAxesMeasureLabel = this.droppedMeasures[0].name;
+      this.xAxesDimensionLabel = this.droppedDimensions[0].name;
       this.spinner.hide();
       this.renderChart();
     }, error => {
       this.spinner.hide();
+      this.snotifyService.error(error.error.message, 'Opps', {
+        showProgressBar: true,
+        position: SnotifyPosition.leftBottom
+      });
     });
   }
 
@@ -113,6 +166,7 @@ export class DataAnalyticsContainerComponent implements OnInit, AfterViewInit {
       this.droppedMeasures = [];
     }
     this.data.datasets = [];
+    this.yAxesMeasureLabel = this.xAxesDimensionLabel = '';
     this.renderChart();
   }
 
