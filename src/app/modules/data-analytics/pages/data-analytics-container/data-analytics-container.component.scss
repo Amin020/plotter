@@ -3,16 +3,12 @@
   width: 100%;
   background-color: #fafafa;
   padding: 20px;
-}
-
-app-column-list {
-  width: 20%;
-  margin-inline-end: auto;
+  overflow: auto;
 }
 
 .columns-list-container {
   height: 100%;
-  width: 20%;
+  width: 15%;
   margin-inline-end: auto;
   border: 1px solid #ccc;
   background-color: #fff;
@@ -43,7 +39,7 @@ main {
 }
 
 .right-section {
-  width: 70%;
+  width: 75%;
 
   .droppable-section-container {
     margin-bottom: 20px;

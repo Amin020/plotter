@@ -5,8 +5,10 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { RoutingModule } from './routing.module';
 import { ColumnsController } from './core/controllers/columns.controller';
-import { DataService } from './core/controllers/data-service';
 import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DataService } from './core/services/data-service';
+import { ChartController } from './core/controllers/chart.controller';
 
 
 @NgModule({
@@ -15,13 +17,15 @@ import { HttpClientModule } from '@angular/common/http';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     RoutingModule,
     HttpClientModule
   ],
   providers: [
     DataService,
-    ColumnsController
+    ColumnsController,
+    ChartController
   ],
   bootstrap: [AppComponent]
 })
