@@ -9,27 +9,30 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 })
 export class DataAnalyticsContainerComponent implements OnInit {
 
-  droppedDimension: any;
-  droppedMeasure: any;
+  droppedDimensions: any = [];
+  droppedMeasures: any = [];
+  columns = ['Product', 'Revenue', 'Year'];
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
-  dropDimension($ev: CdkDragDrop<string[]>): void {
-    if ($ev.previousContainer === $ev.container) {
-      moveItemInArray($ev.container.data, $ev.previousIndex, $ev.currentIndex);
-    } else {
-      transferArrayItem($ev.previousContainer.data,
-        $ev.container.data,
-        $ev.previousIndex,
-        $ev.currentIndex);
-    }
+  drop($ev: CdkDragDrop<string[]>): void {
+    transferArrayItem($ev.previousContainer.data,
+      $ev.container.data,
+      $ev.previousIndex,
+      $ev.currentIndex);
   }
 
-  dropMeasure($ev: CdkDragDrop<string[]>): void {
-
+  clearData(type: string) {
+    if (type === 'dimension') {
+      this.columns.push(...this.droppedDimensions);
+      this.droppedDimensions = [];
+    } else if (type === 'measure') {
+      this.columns.push(...this.droppedMeasures);
+      this.droppedMeasures = [];
+    }
   }
 
 }

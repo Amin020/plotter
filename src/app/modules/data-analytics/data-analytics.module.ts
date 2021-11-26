@@ -2,15 +2,21 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { DataAnalyticsRoutingModule } from './data-analytics-routing.module';
-import { ColumnListComponent } from './components/column-list/column-list.component';
 import { DataAnalyticsContainerComponent } from './pages/data-analytics-container/data-analytics-container.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 
 @NgModule({
-  declarations: [ColumnListComponent, DataAnalyticsContainerComponent],
+  declarations: [
+    DataAnalyticsContainerComponent
+  ],
   imports: [
     CommonModule,
+    DragDropModule,
     DataAnalyticsRoutingModule
+  ],
+  exports: [
+    DragDropModule
   ]
 })
 export class DataAnalyticsModule { }

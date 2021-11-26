@@ -10,6 +10,35 @@ app-column-list {
   margin-inline-end: auto;
 }
 
+.columns-list-container {
+  height: 100%;
+  width: 20%;
+  margin-inline-end: auto;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  border-radius: 5px;
+  overflow: visible;
+}
+
+header {
+  font-weight: bold;
+  font-size: 20px;
+  border-bottom: 1px solid #ccc;
+  padding: 20px;
+}
+
+main {
+  .column-item {
+    padding: 15px 20px;
+    font-weight: bold;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #ebebeb;
+    }
+  }
+}
+
 .right-section {
   width: 70%;
 
@@ -25,10 +54,23 @@ app-column-list {
     }
 
     .droppable-area {
+      display: flex;
+      align-items: center;
       min-height: 34px;
       width: 50%;
       border: #ccc 1px solid;
       border-inline-end: none;
+      padding: 0 5px;
+
+      .dropped-item {
+        background-color: #fff;
+        padding: 3px 10px;
+        margin-inline-end: 5px;
+        border: 1px solid #ebebeb;
+        border-radius: 3px;
+        font-size: 12px;
+        font-weight: bold;
+      }
     }
 
     .clear-btn {

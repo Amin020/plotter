@@ -4,7 +4,6 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { RoutingModule } from './routing.module';
-import { DragDropModule } from '@angular/cdk/drag-drop';
 
 
 @NgModule({
@@ -14,8 +13,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
   imports: [
     BrowserModule,
     FormsModule,
-    RoutingModule,
-    DragDropModule
+    RoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
