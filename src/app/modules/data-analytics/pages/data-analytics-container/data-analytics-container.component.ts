@@ -26,8 +26,8 @@ export class DataAnalyticsContainerComponent implements OnInit, AfterViewInit {
     labels: [],
     datasets: [],
   };
-  private yAxesMeasureLabel = '';
-  private xAxesDimensionLabel = '';
+  private yAxesMeasureLabel = [];
+  private xAxesDimensionLabel = [];
   @ViewChild('mychart') private mychart: ElementRef;
 
   constructor(
@@ -122,13 +122,7 @@ export class DataAnalyticsContainerComponent implements OnInit, AfterViewInit {
       }
     }
     if (type === 'measure') {
-      if (this.droppedMeasures.length > 0) {
-        this.snotifyService.error('Should only contains one measure!', 'Oops', {
-          showProgressBar: true,
-          position: SnotifyPosition.leftBottom
-        });
-        isValid = false;
-      } else if (draggedItem.function === 'dimension') {
+      if (draggedItem.function === 'dimension') {
         this.snotifyService.error('Dragged column represents Dimension!', 'Oops', {
           showProgressBar: true,
           position: SnotifyPosition.leftBottom
@@ -143,8 +137,8 @@ export class DataAnalyticsContainerComponent implements OnInit, AfterViewInit {
     this.spinner.show();
     this.chartController.getChartData(this.droppedMeasures, this.droppedDimensions, (chartDatasets, chartLabels) => {
       this.data = { datasets: chartDatasets, labels: chartLabels };
-      this.yAxesMeasureLabel = this.droppedMeasures[0].name;
-      this.xAxesDimensionLabel = this.droppedDimensions[0].name;
+      this.yAxesMeasureLabel = this.droppedMeasures.map(measure => measure.name);
+      this.xAxesDimensionLabel = this.droppedDimensions.map(dimension => dimension.name);;
       this.spinner.hide();
       this.renderChart();
     }, error => {
@@ -166,7 +160,8 @@ export class DataAnalyticsContainerComponent implements OnInit, AfterViewInit {
       this.droppedMeasures = [];
     }
     this.data.datasets = [];
-    this.yAxesMeasureLabel = this.xAxesDimensionLabel = '';
+    this.yAxesMeasureLabel = [];
+    this.xAxesDimensionLabel = [];
     this.renderChart();
   }
 
